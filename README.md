@@ -1,24 +1,33 @@
-В данной ветке лежит задание по паттернам.
-Данная "игра" моделирует войну двух стран, в данном контексте это СССР и Германия.
-Из порождающих паттернов тут применены factory для создания типов энитов и abstract factory для создания целых армий.
-Также тут есть паттерн Prototype, реализованный через метод clone для абстрактного юнита.
-Из структурных паттернов применен компоновщик, создающий subdivision из юнитов и адаптер, превращающий уничтоженную артиллерию в "ракету"
-Из поведенческих же тут есть Visitor, "реализующий" взаимодействие между юнитами.
-А также Observer, говорящий о том, где ближайший враг.
-Сборка проета производится сборкой cmake и дальнейшего make или же просто g++ main.cpp
+# Model of historical game
 
-Более подробно:
+##Legend
+Your army is going to have a fight with opponents team. Your army 
+can shoot and go, opponent's army can do same. Army loses, if it 
+doesn't have any units at all.
 
-В первой части main находится создание "базового окружения" - наблюдателя и двух армий, которые потом превращаются в дивизии и разделяются.
-В данной игре наблюдатель выполняет роль "судьи", организовывающего сражения и сообщающего как пользователю, так и армиям (конкретным юнитам), об итогах хода.
-Также observer позволяет отследить состояние армий, о котором конкретным юнитам знать необязательно.
+##Units
 
-На данный момент для отдельных юнитов и для целых дивизий реализованы метод shoot, который реализован через visitor, цель которого проводить атаку для абстрактного юнита, переводя нападение в конкретную реализацию в соответствие с возможностями конкретного юнита (и дальнейшее информирование об итогах).
-И метод go (он не реализован, а лишь объявлен)
+All types of units are created, according to factory pattern, from 
+abstract unit class. Armies are created via abstract factory pattern.
+Units can be grouped into subdivisions and be like one strong unit.
+If artillery loses all it's health points, it becomes a Rocket.
 
-Во второй части кода можно наблюдать "сражение" двух армий, так как метод go лишь объявлен, на данный момент это аналог pass в Python. 
-То есть вся игра - попытка атаковать и получить в ответ либо атаку противника, либо скипнутый им ход.
+##Regulations
 
-Атака осуществляется так: ищется ближайший вражеский юнит, а потом на него совершается нападение конкретным юнитом (все схватки односторонние).
+Class Observer is created for regulations any events on field of play.
+It helps armies to know about state of all army and lets each unit to
+know about it's state.
+Also, there s Visitor class to regulate any local fights beetween each
+pair of units.
 
-Игра оканчивается при окончании всех юнитов и дивизий одной из сторон. Так как все схватки односторонние, ничьи тут быть не может.
+##Rules
+
+In this version "go" method is not implemented, but method shoot works:
+for each unit finds the nearest opponent's one, what is alive at that 
+moment, after there is "fight" beetween them, which regulated via Visitor. 
+After some shoots one army loses. Result of game depends on start position 
+of each unit, but it generates randomly, so fight is randomly now:)
+
+##Building
+
+There is CMake file for building this project.
